@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>银蜂 · 不蜇人的蜜蜂</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-dark: #0e0f14;
+      --bg-card: #16181f;
+      --bg-elevated: #1c1f28;
+      --border-dim: #2a2e3a;
+      --border-light: #363b48;
+
+      --gold: #d4a373;
+      --gold-light: #e7c6a4;
+      --gold-dark: #b8864b;
+
+      --text-primary: #f0f2f7;
+      --text-secondary: #9aa0b0;
+      --text-muted: #5e6472;
+
+      --radius-xl: 36px;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --shadow-sm: 0 12px 30px -12px rgba(0, 0, 0, 0.6);
+      --shadow-glow: 0 0 30px -8px rgba(212, 163, 115, 0.2);
+
+      --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background-image: radial-gradient(circle at 20% 10%, rgba(212, 163, 115, 0.04) 0%, transparent 35%),
+                        radial-gradient(circle at 90% 70%, rgba(212, 163, 115, 0.03) 0%, transparent 40%);
+    }
+
+    .container {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 0 28px;
+      width: 100%;
+    }
+
+    /* ---------- 导航 ---------- */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 0;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.9rem;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(145deg, #c9cbd4, #8b8f9e, #d4a373);
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #0e0f14;
+      font-size: 1.7rem;
+      box-shadow: 0 8px 18px -8px rgba(212, 163, 115, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+      transform: rotate(3deg);
+      transition: transform 0.25s ease;
+    }
+
+    .logo:hover .logo-icon { transform: rotate(0deg) scale(1.03); }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      align-items: center;
+      font-weight: 500;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 1rem;
+      transition: color 0.2s ease;
+      position: relative;
+      padding-bottom: 6px;
+      cursor: pointer;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      border-radius: 2px;
+      transition: width 0.25s ease;
+    }
+
+    .nav-links a:hover { color: var(--text-primary); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 60px;
+      padding: 60px 0 90px;
+      flex-wrap: wrap;
+    }
+
+    .hero-content { flex: 1 1 420px; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(212, 163, 115, 0.12);
+      color: var(--gold-light);
+      padding: 8px 20px 8px 16px;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      margin-bottom: 32px;
+      border: 1px solid rgba(212, 163, 115, 0.25);
+      backdrop-filter: blur(4px);
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulseGlow 2s infinite;
+      box-shadow: 0 0 12px var(--gold);
+    }
+
+    @keyframes pulseGlow {
+      0% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.3); }
+      100% { opacity: 0.5; transform: scale(1); }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 6.5vw, 4.4rem);
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -0.03em;
+      margin-bottom: 28px;
+      color: var(--text-primary);
+    }
+
+    .hero h1 .highlight {
+      background: linear-gradient(145deg, #e7c6a4, #d4a373, #b87333);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero h1 .highlight::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 6px;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0.35;
+      border-radius: 4px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      max-width: 560px;
+      margin-bottom: 44px;
+      line-height: 1.75;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .btn-large {
+      padding: 18px 42px;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 1.05rem;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn-large.primary {
+      background: linear-gradient(145deg, #d4a373, #b8864b);
+      color: #0e0f14;
+      box-shadow: 0 14px 28px -10px rgba(212, 163, 115, 0.5);
+    }
+
+    .btn-large.primary:hover {
+      background: linear-gradient(145deg, #e7c6a4, #c99a5e);
+      transform: translateY(-4px);
+      box-shadow: 0 24px 36px -12px rgba(212, 163, 115, 0.7);
+    }
+
+    .btn-large.secondary {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1.5px solid var(--border-light);
+      backdrop-filter: blur(4px);
+    }
+
+    .btn-large.secondary:hover {
+      background: rgba(212, 163, 115, 0.08);
+      border-color: var(--gold);
+      color: var(--gold-light);
+      transform: translateY(-4px);
+    }
+
+    .btn-large:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    /* 右侧知识卡片 */
+    .hero-visual {
+      flex: 1 1 380px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .visual-card {
+      background: linear-gradient(145deg, #1a1d26, #12141b);
+      border-radius: var(--radius-xl);
+      padding: 36px;
+      box-shadow: var(--shadow-sm), 0 0 0 1px rgba(212, 163, 115, 0.15), var(--shadow-glow);
+      border: 1px solid var(--border-dim);
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .visual-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+    .visual-dots { display: flex; gap: 8px; }
+
+    .visual-dots span {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #2a2e3a;
+    }
+
+    .visual-dots span:first-child { background: #e06b6b; }
+    .visual-dots span:nth-child(2) { background: #e0b56b; }
+    .visual-dots span:last-child { background: #6bb88a; }
+
+    .visual-progress {
+      height: 10px;
+      background: #1f232e;
+      border-radius: 12px;
+      margin: 22px 0 18px;
+      overflow: hidden;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6);
+    }
+
+    .progress-bar {
+      width: 68%;
+      height: 100%;
+      background: linear-gradient(90deg, #b87333, #d4a373, #e7c6a4);
+      border-radius: 12px;
+      box-shadow: 0 0 16px rgba(212, 163, 115, 0.5);
+    }
+
+    .visual-stats {
+      display: flex;
+      gap: 28px;
+      margin-top: 32px;
+      justify-content: space-between;
+    }
+
+    .stat-item h4 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      background: linear-gradient(145deg, #e7c6a4, #d4a373);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .stat-item p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ---------- 阅读区（分页） ---------- */
+    .reader {
+      display: none;
+      padding: 20px 0 100px;
+    }
+
+    .reader.active { display: block; }
+
+    .page {
+      display: none;
+      animation: fadeUp 0.45s ease;
+    }
+
+    .page.active { display: block; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .page-label {
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      font-weight: 600;
+      color: var(--gold);
+      margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+
+    .page-title {
+      font-size: clamp(2rem, 4.5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+      background: linear-gradient(to right, #ffffff, #c9cbd4);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .page-intro {
+      font-size: 1.12rem;
+      color: var(--text-secondary);
+      max-width: 660px;
+      margin-bottom: 52px;
+      line-height: 1.75;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-dim);
+      border-radius: var(--radius-lg);
+      padding: 34px 30px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, transparent, #d4a373, #e7c6a4, transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .card:hover::before { opacity: 1; }
+
+    .card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(212, 163, 115, 0.4);
+      background: var(--bg-elevated);
+      box-shadow: 0 24px 40px -18px rgba(0, 0, 0, 0.8);
+    }
+
+    .card-icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(145deg, #1f232e, #181b23);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 26px;
+      font-size: 1.8rem;
+      border: 1px solid var(--border-light);
+      transition: all 0.3s ease;
+    }
+
+    .card:hover .card-icon {
+      background: linear-gradient(145deg, #d4a373, #b87333);
+      border-color: transparent;
+    }
+
+    .card h3 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .card p {
+      color: var(--text-secondary);
+      line-height: 1.75;
+      font-size: 0.98rem;
+    }
+
+    /* 对比表 */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border-dim);
+    }
+
+    .compare-table th {
+      text-align: left;
+      padding: 18px 24px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--gold-light);
+      background: rgba(212, 163, 115, 0.08);
+      border-bottom: 1px solid var(--border-dim);
+    }
+
+    .compare-table td {
+      padding: 18px 24px;
+      font-size: 0.98rem;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-dim);
+      line-height: 1.6;
+    }
+
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr:hover td { background: rgba(212, 163, 115, 0.03); color: var(--text-primary); }
+    .compare-table td:first-child { color: var(--text-primary); font-weight: 500; }
+
+    .note {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 20px;
+      line-height: 1.7;
+    }
+
+    /* 品种卡 */
+    .species-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 26px;
+    }
+
+    .species-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-dim);
+      border-radius: var(--radius-lg);
+      padding: 30px 26px;
+      transition: all 0.3s ease;
+    }
+
+    .species-card:hover {
+      border-color: rgba(212, 163, 115, 0.4);
+      background: var(--bg-elevated);
+      transform: translateY(-6px);
+    }
+
+    .species-card h4 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .species-card .latin {
+      font-size: 0.85rem;
+      color: var(--gold);
+      font-style: italic;
+      margin-bottom: 16px;
+    }
+
+    .species-card p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* ---------- 分页控制条 ---------- */
+    .pager {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 64px;
+      padding-top: 36px;
+      border-top: 1px solid var(--border-dim);
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .pager-dots {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #2a2e3a;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .dot.active {
+      background: var(--gold);
+      width: 28px;
+      border-radius: 6px;
+      box-shadow: 0 0 12px rgba(212, 163, 115, 0.6);
+    }
+
+    .dot:hover { background: var(--gold-dark); }
+
+    .pager-actions {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .btn-page {
+      padding: 14px 32px;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 0.98rem;
+      cursor: pointer;
+      border: 1.5px solid var(--border-light);
+      background: transparent;
+      color: var(--text-primary);
+      font-family: inherit;
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-page:hover:not(:disabled) {
+      border-color: var(--gold);
+      color: var(--gold-light);
+      background: rgba(212, 163, 115, 0.08);
+      transform: translateY(-3px);
+    }
+
+    .btn-page.next {
+      background: linear-gradient(145deg, #d4a373, #b8864b);
+      color: #0e0f14;
+      border-color: transparent;
+      box-shadow: 0 12px 24px -10px rgba(212, 163, 115, 0.5);
+    }
+
+    .btn-page.next:hover:not(:disabled) {
+      background: linear-gradient(145deg, #e7c6a4, #c99a5e);
+      color: #0e0f14;
+      box-shadow: 0 20px 32px -12px rgba(212, 163, 115, 0.7);
+    }
+
+    .btn-page:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .page-counter {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    /* ---------- 页脚 ---------- */
+    .footer {
+      margin-top: auto;
+      border-top: 1px solid var(--border-dim);
+      padding: 44px 0 32px;
+      background: #0b0c10;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+
+    .footer-copy {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--gold-light); }
+
+    /* ---------- 响应式 ---------- */
+    @media (max-width: 860px) {
+      .navbar { flex-direction: column; align-items: flex-start; gap: 20px; }
+      .nav-links { gap: 22px; flex-wrap: wrap; }
+      .hero { padding: 30px 0 60px; gap: 40px; }
+      .hero h1 { font-size: clamp(2.3rem, 8vw, 3.2rem); }
+      .hero-actions { flex-direction: column; align-items: stretch; }
+      .btn-large { justify-content: center; }
+      .footer-content { flex-direction: column; align-items: flex-start; gap: 24px; }
+      .compare-table th, .compare-table td { padding: 14px 16px; font-size: 0.88rem; }
+      .pager { flex-direction: column-reverse; gap: 24px; }
+      .pager-actions { width: 100%; justify-content: space-between; }
+      .btn-page { flex: 1; justify-content: center; padding: 14px 20px; }
+    }
+
+    @media (max-width: 480px) {
+      .container { padding: 0 20px; }
+      .logo { font-size: 1.6rem; }
+      .logo-icon { width: 38px; height: 38px; font-size: 1.4rem; }
+      .card { padding: 26px 22px; }
+      .compare-table th, .compare-table td { padding: 12px 12px; font-size: 0.82rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 导航 -->
+  <div class="container">
+    <header class="navbar">
+      <a class="logo" onclick="goHome()">
+        <span class="logo-icon">🐝</span>
+        银蜂
+      </a>
+      <nav class="nav-links">
+        <a onclick="goPage(0)">认识</a>
+        <a onclick="goPage(1)">蜂蜜</a>
+        <a onclick="goPage(2)">辨别</a>
+        <a onclick="goPage(3)">品种</a>
+      </nav>
+    </header>
+  </div>
+
+  <!-- ========== 首页（Hero） ========== -->
+  <div class="container" id="home">
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          全球 800 种 · 马来西亚 33 种
+        </div>
+        <h1>
+          它不蜇人 <br>
+          <span class="highlight">却让人重新认识蜂蜜</span>
+        </h1>
+        <p>
+          银蜂尾部没有毒刺，性格温顺，外形像苍蝇。它产的蜜甜中带酸，颜色随花源变化。这里只讲银蜂是什么，以及它的蜜为什么特别。
+        </p>
+        <div class="hero-actions">
+          <button class="btn-large primary" onclick="startReading()">开始了解 →</button>
+          <button class="btn-large secondary" onclick="goPage(1)">直接看蜜</button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="visual-card">
+          <div class="visual-header">
+            <div class="visual-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <span style="font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0.3px;">银蜂 · 蜂巢面板</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <span style="font-weight: 600; color: var(--text-secondary);">采蜜活跃度</span>
+            <span style="color: var(--gold); font-weight: 600;">68%</span>
+          </div>
+          <div class="visual-progress">
+            <div class="progress-bar"></div>
+          </div>
+          <div class="visual-stats">
+            <div class="stat-item">
+              <h4>800</h4>
+              <p>全球品种</p>
+            </div>
+            <div class="stat-item">
+              <h4>33</h4>
+              <p>大马品种</p>
+            </div>
+            <div class="stat-item">
+              <h4>0</h4>
+              <p>毒刺</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ========== 阅读区（分页） ========== -->
+  <div class="container">
+    <section class="reader" id="reader">
+
+      <!-- 第 1 页：认识银蜂 -->
+      <div class="page active" data-page="0">
+        <div class="page-label">第 1 页 · 认识银蜂</div>
+        <h2 class="page-title">一种不会蜇人的蜜蜂</h2>
+        <p class="page-intro">
+          银蜂学名 Trigona Carbonaria，马来语叫 Lebah Kelulut。它尾部无毒刺，性格温驯，从不主动攻击。白天按固定节奏出巢采蜜，中午回巢休息，傍晚再出。
+        </p>
+        <div class="cards-grid">
+          <div class="card">
+            <div class="card-icon">🐝</div>
+            <h3>没有毒刺</h3>
+            <p>银蜂尾部没有毒刺，不会蜇人。它可以安全地养在住宅旁边，也是最适合靠近观察的蜂种之一。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🌏</div>
+            <h3>热带分布</h3>
+            <p>全球约 800 种银蜂，主要分布在东南亚、澳大利亚、巴西等热带地区。单是马来西亚就有约 33 个品种。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🕐</div>
+            <h3>规律作息</h3>
+            <p>银蜂每天按固定时间出巢采蜜，中午回巢休息，傍晚再出。它从不侵占其他蜂巢，自律性很强。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第 2 页：蜂蜜特点 -->
+      <div class="page" data-page="1">
+        <div class="page-label">第 2 页 · 蜂蜜特点</div>
+        <h2 class="page-title">甜中带酸，颜色随花</h2>
+        <p class="page-intro">
+          银蜂蜜和普通蜂蜜很不一样。普通蜂蜜偏甜，银蜂蜜甜中带酸，质地更稀，含水量更高，含有较多酵素。它的颜色和风味跟着花源走——采山竹花偏紫，采榴梿花偏黄，每一批味道都不太一样。
+        </p>
+        <div class="cards-grid">
+          <div class="card">
+            <div class="card-icon">🍯</div>
+            <h3>甜中带酸</h3>
+            <p>银蜂蜜不是纯甜，有一丝酸味和果香。口感醇口清香，质地偏稀，含水量约 30–40%。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🌸</div>
+            <h3>花源决定风味</h3>
+            <p>采山竹花，蜜偏紫；采榴梿花，蜜偏黄；采金合欢，蜜呈金色。每一批蜜的味道都跟着季节和花源走。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🧪</div>
+            <h3>酵素丰富</h3>
+            <p>银蜂蜜含有较多酵素，有养蜂人认为这有助于促进细胞新陈代谢。这也是它被称为“酵素蜜”的原因。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第 3 页：辨别真假 -->
+      <div class="page" data-page="2">
+        <div class="page-label">第 3 页 · 辨别真假</div>
+        <h2 class="page-title">天然银蜂蜜 vs 合成蜜</h2>
+        <p class="page-intro">
+          市面上蜂蜜真假混杂。有研究指出，马来西亚市场贩售的蜂蜜中，相当比例属于混入糖浆的合成蜜。以下是一个简单参考。
+        </p>
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>观察点</th>
+              <th>天然银蜂蜜</th>
+              <th>合成蜜</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>外观</td>
+              <td>略浑浊，有花粉微粒</td>
+              <td>透明清澈</td>
+            </tr>
+            <tr>
+              <td>香味</td>
+              <td>有花香 / 果香</td>
+              <td>只有甜味</td>
+            </tr>
+            <tr>
+              <td>泡沫</td>
+              <td>冲泡摇晃后泡沫多且持久</td>
+              <td>泡沫少、快速消失</td>
+            </tr>
+            <tr>
+              <td>蛋白质</td>
+              <td>标签上应有蛋白质含量</td>
+              <td>无蛋白质标注</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="note">
+          注意：银蜂蜜含水量高，蚂蚁会吃，所以“蚂蚁不碰”不能用来判断真假。选购时可留意包装上是否有 myGAP 或 Halal 认证。
+        </p>
+      </div>
+
+      <!-- 第 4 页：品种图鉴 -->
+      <div class="page" data-page="3">
+        <div class="page-label">第 4 页 · 品种图鉴</div>
+        <h2 class="page-title">三种常见的银蜂</h2>
+        <p class="page-intro">
+          银蜂品种很多，以下是马来西亚最常见的三种。
+        </p>
+        <div class="species-grid">
+          <div class="species-card">
+            <h4>一大马</h4>
+            <div class="latin">Heterotrigona itama</div>
+            <p>体型较小，飞行范围不超过 1 公里。最容易饲养，对环境适应力强，是马来西亚最常见的养殖品种。</p>
+          </div>
+          <div class="species-card">
+            <h4>西卡</h4>
+            <div class="latin">Geniotrigona thoracica</div>
+            <p>体型最大，飞行范围 2–3 公里。采蜜量较高，价格较贵，是银蜂蜜中的高端品种。</p>
+          </div>
+          <div class="species-card">
+            <h4>白翅膀</h4>
+            <div class="latin">Tetrigona binghami</div>
+            <p>翅膀偏白，对生活环境要求高。蜜囊小，产量少，较难饲养，属于较罕见的品种。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 分页控制条 -->
+      <div class="pager">
+        <div class="pager-dots" id="pagerDots"></div>
+        <div class="page-counter" id="pageCounter">1 / 4</div>
+        <div class="pager-actions">
+          <button class="btn-page prev" id="btnPrev" onclick="prevPage()">← 上一页</button>
+          <button class="btn-page next" id="btnNext" onclick="nextPage()">下一页 →</button>
+        </div>
+      </div>
+
+    </section>
+  </div>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-copy">
+          © 2025 银蜂知识站 · 只分享，不推销
+        </div>
+        <div class="footer-links">
+          <a onclick="goPage(0)">认识银蜂</a>
+          <a onclick="goPage(1)">蜂蜜特点</a>
+          <a onclick="goPage(2)">辨别真假</a>
+          <a onclick="goPage(3)">品种图鉴</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const TOTAL_PAGES = 4;
+    let currentPage = 0;
+
+    const homeEl   = document.getElementById('home');
+    const readerEl = document.getElementById('reader');
+    const pages    = document.querySelectorAll('.page');
+    const dotsWrap = document.getElementById('pagerDots');
+    const counter  = document.getElementById('pageCounter');
+    const btnPrev  = document.getElementById('btnPrev');
+    const btnNext  = document.getElementById('btnNext');
+
+    /* 初始化分页点 */
+    for (let i = 0; i < TOTAL_PAGES; i++) {
+      const d = document.createElement('span');
+      d.className = 'dot' + (i === 0 ? ' active' : '');
+      d.onclick = () => goPage(i);
+      dotsWrap.appendChild(d);
+    }
+    const dots = document.querySelectorAll('.dot');
+
+    /* 显示某一页 */
+    function render() {
+      pages.forEach((p, i) => {
+        p.classList.toggle('active', i === currentPage);
+      });
+      dots.forEach((d, i) => {
+        d.classList.toggle('active', i === currentPage);
+      });
+      counter.textContent = (currentPage + 1) + ' / ' + TOTAL_PAGES;
+
+      btnPrev.disabled = currentPage === 0;
+
+      if (currentPage === TOTAL_PAGES - 1) {
+        btnNext.textContent = '回到顶部 ↑';
+        btnNext.onclick = backToTop;
+      } else {
+        btnNext.textContent = '下一页 →';
+        btnNext.onclick = nextPage;
+      }
+
+      /* 滚动到阅读区顶部 */
+      readerEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    /* 从首页进入阅读 */
+    function startReading() {
+      homeEl.style.display = 'none';
+      readerEl.classList.add('active');
+      currentPage = 0;
+      render();
+    }
+
+    /* 跳转到指定页（也会自动进入阅读模式） */
+    function goPage(index) {
+      if (index < 0 || index >= TOTAL_PAGES) return;
+      homeEl.style.display = 'none';
+      readerEl.classList.add('active');
+      currentPage = index;
+      render();
+    }
+
+    function nextPage() {
+      if (currentPage < TOTAL_PAGES - 1) {
+        currentPage++;
+        render();
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 0) {
+        currentPage--;
+        render();
+      }
+    }
+
+    function backToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* 点击 Logo 回到首页 */
+    function goHome() {
+      readerEl.classList.remove('active');
+      homeEl.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+
+</body>
+</html>
